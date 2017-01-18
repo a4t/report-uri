@@ -1,0 +1,16 @@
+# default
+!.gitkeep
+
+# docker
+/data/*
+/.env/app.env
+/.env/infra.env
+/.env/test.env
+
+# terraform
+/terraform/.terraform
+/terraform/terraform.tfvars
+
+# application
+/app/config/notification.yml
+/app/Gemfile.lock

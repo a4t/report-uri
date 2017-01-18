@@ -1,0 +1,35 @@
+#!/bin/bash
+
+apt-get update
+
+apt-get install -y apt-transport-https ca-certificates
+
+# Install Docker
+apt-key adv \
+  --keyserver hkp://ha.pool.sks-keyservers.net:80 \
+  --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
+echo 'deb https://apt.dockerproject.org/repo ubuntu-xenial main' | sudo tee /etc/apt/sources.list.d/docker.list
+apt-get update
+apt-get install -y linux-image-extra-$$(uname -r) linux-image-extra-virtual
+apt-get install -y docker-engine
+service docker start
+
+# Install Docker Compose
+curl -L "https://github.com/docker/compose/releases/download/1.9.0/docker-compose-$$(uname -s)-$$(uname -m)" -o /usr/local/bin/docker-compose
+chmod 744 /usr/local/bin/docker-compose
+
+# Application
+git clone https://github.com/a4t/report-uri.git /var/report-uri
+cd /var/report-uri/
+
+## Setting env
+echo "SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL}" > ./.env/app.env
+cat << EOS > ./app/config/notification.yml
+${NOTIFICATION_YML}
+EOS
+
+/usr/local/bin/docker-compose -f docker-compose-app.yml up -d
+
+# norikra起動待ち
+sleep 30
+docker-compose -f docker-compose-app.yml exec -T norikra norikra-client query add csp_logger "`cat ./docker/norikra/querys/csp_logger.query`"

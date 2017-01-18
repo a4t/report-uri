@@ -1,0 +1,21 @@
+SELECT
+  document_uri,
+  blocked_uri,
+  source_file,
+  effective_directive,
+  line_number,
+  original_policy,
+  violated_directive,
+  slack_channel,
+  COUNT(*) AS count
+FROM
+  csp_logger.win:time_batch(1 hour)
+GROUP BY
+  document_uri,
+  blocked_uri,
+  source_file,
+  effective_directive,
+  line_number,
+  original_policy,
+  violated_directive,
+  slack_channel

@@ -1,0 +1,48 @@
+networks: {}
+version: '2.0'
+
+services:
+  nginx:
+    build:
+      context: ./
+      dockerfile: ./docker/nginx/Dockerfile.sample
+    volumes:
+      - ./sample:/app
+      - ./docker/nginx/conf.d/default.sample.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - "8080:8080"   # https
+      - "8081:8081"   # http
+      - "26578:26578" # Norikra
+    links:
+      - "puma:puma"
+    restart: always
+
+  puma:
+    build:
+      context: ./
+      dockerfile: ./docker/puma/Dockerfile
+    environment:
+      - THREAD_MIN=8
+      - THREAD_MAX=32
+      - WORKER_COUNT=3
+    volumes:
+      - ./app:/app
+    command: "foreman start"
+    links:
+      - "fluentd:fluentd"
+    restart: always
+
+  fluentd:
+    build:
+      context: ./
+      dockerfile: ./docker/fluentd/Dockerfile
+    volumes:
+      - ./docker/fluentd/conf/fluent.conf:/fluentd/etc/fluent.conf
+      - ./data/fluentd:/data
+    env_file: ./.env/test.env
+    restart: always
+
+  norikra:
+    image: minimum2scp/norikra
+    volumes:
+      - ./docker/norikra/querys:/norikra/querys

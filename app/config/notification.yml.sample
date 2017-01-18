@@ -1,0 +1,6 @@
+notification:
+  hosts:
+    default:
+      slack_channel: hogehoge
+    example.com:
+      slack_channel: example-com

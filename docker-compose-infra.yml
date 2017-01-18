@@ -1,0 +1,12 @@
+networks: {}
+version: '2.0'
+
+services:
+  terraform:
+    build:
+      context: ./
+      dockerfile: ./docker/terraform/Dockerfile
+    volumes:
+      - ./terraform:/terraform
+      - ./app/config/notification.yml:/app/config/notification.yml
+    env_file: ./.env/infra.env

@@ -1,0 +1,1 @@
+{"csp-report":{"document-uri":"https://localhost:8080/","referrer":"","violated-directive":"default-src https://* ","effective-directive":"img-src","original-policy":"default-src https://* ; report-uri https://localhost:8080/csp_report/","blocked-uri":"http://localhost:8081/img/sample.gif","line-number":7,"source-file":"https://localhost:8080/","status-code":0}}
