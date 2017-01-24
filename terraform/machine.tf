@@ -99,3 +99,21 @@ resource "aws_autoscaling_group" "app" {
     propagate_at_launch = true
   }
 }
+
+resource "aws_autoscaling_schedule" "add_server" {
+  scheduled_action_name = "Rolling add server"
+  min_size = 2
+  max_size = 2
+  desired_capacity = 2
+  recurrence = "0 20 * * *"
+  autoscaling_group_name = "${aws_launch_configuration.app.name}"
+}
+
+resource "aws_autoscaling_schedule" "remove_server" {
+  scheduled_action_name = "Rolling remove server"
+  min_size = 1
+  max_size = 1
+  desired_capacity = 1
+  recurrence = "0 21 * * *"
+  autoscaling_group_name = "${aws_launch_configuration.app.name}"
+}
