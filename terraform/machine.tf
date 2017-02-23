@@ -80,6 +80,7 @@ resource "aws_autoscaling_group" "app" {
   health_check_type         = "EC2"
   force_delete              = true
   launch_configuration      = "${aws_launch_configuration.app.name}"
+  termination_policies      = ["OldestInstance"]
 
   tag {
     key                 = "Name"
