@@ -9,7 +9,7 @@ SELECT
   slack_channel,
   COUNT(*) AS count
 FROM
-  csp_logger.win:time_batch(1 hour)
+  csp_logger.win:time_batch(1 day)
 GROUP BY
   document_uri,
   blocked_uri,
